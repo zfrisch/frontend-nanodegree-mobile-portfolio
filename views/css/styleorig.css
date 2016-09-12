@@ -31,8 +31,6 @@ form {
 
 .mover {
   will-change: left, transform;
-  backface-visibility: hidden;
-  transform: translate3d(0,0,0);
   position: fixed;
   width: 256px;
   z-index: -1;
