@@ -1,55 +1,59 @@
-## Website Performance Optimization portfolio project
+# Website Optimization
+This Project is For Udacity Coursework [Udacity Front-End Project](https://github.com/udacity/)
 
-Your challenge, if you wish to accept it (and we sure hope you will), is to optimize this online portfolio for speed! In particular, optimize the critical rendering path and make this page render as quickly as possible by applying the techniques you've picked up in the [Critical Rendering Path course](https://www.udacity.com/course/ud884).
+## Instructions For Use
+* Download this Project or clone repository through Git.
+* Open Index.html in a Web Browser
 
-To get started, check out the repository and inspect the code.
+## Optimizations for pizza.html, main.js, and style.css
+* minified JS/CSS/html using:
+    * https://jscompress.com/ 
+    * https://cssminifier.com/
+    * http://www.willpeavy.com/minifier/
+* added will-change property to .mover class
 
-### Getting started
+* resizePizzas()
+	  * changed out pizzaSize DOM searches for a reference
+	 
+* changePizzaSizes(), sizeSwitcher()
+    * made a reference to randomPizzaContainer and utilized that instead of querying the DOM every time.
+    * added global variables for windowWidth, element offset width, and element offset width divided by windowWidth, instead of having them computed in for loop.
+    * removed determinDX function as it was rather pointless. Hardcoded the basic math into the for loop and made the sizeSwitcher globally accessible for quick use. This removes a function call and lowers are speed.
 
-####Part 1: Optimize PageSpeed Insights score for index.html
+* UpdatePositions()
+    * pulled document.body reference and calculation out of for loop and used window.scrollY / 1250 as const
+    * changed querySelectorAll to getElementsByClassName
+    * made phase for sin wave an array to do 5 calculations once and then reference in for loop.
+    * changed style.left to style.transform 
 
-Some useful tips to help you get started:
+* scroll event listener
+    * originally found snippet on html5 rocks
+    * we are using this to make sure the updatePositions function isn't firing unnecessarily.
+```
+var last_known_scroll_position = 0;
+var ticking = false;
 
-1. Check out the repository
-1. To inspect the site on your phone, you can run a local server
+window.addEventListener('scroll', function(e) {
+  last_known_scroll_position = window.scrollY;
+  if (!ticking) {
+    window.requestAnimationFrame(function() {
+      updatePositions();
+      ticking = false;
+    });
+  }
+  ticking = true;
+});
+```
 
-  ```bash
-  $> cd /path/to/your-project-folder
-  $> python -m SimpleHTTPServer 8080
-  ```
+* DOM Content Loaded
+    * reduced pizzas from 200 to 35
+    * changed querySelector to getelementbyid and pulled out of for loop as const
+    * had to set the original left position of each element so that translateX could be used effectively in the updatePositions function
 
-1. Open a browser and visit localhost:8080
-1. Download and install [ngrok](https://ngrok.com/) to the top-level of your project directory to make your local server accessible remotely.
-
-  ``` bash
-  $> cd /path/to/your-project-folder
-  $> ./ngrok http 8080
-  ```
-
-1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! Optional: [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
-
-Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
-
-####Part 2: Optimize Frames per Second in pizza.html
-
-To optimize views/pizza.html, you will need to modify views/js/main.js until your frames per second rate is 60 fps or higher. You will find instructive comments in main.js. 
-
-You might find the FPS Counter/HUD Display useful in Chrome developer tools described here: [Chrome Dev Tools tips-and-tricks](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### Optimization Tips and Tricks
-* [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")
-* [Analyzing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "analyzing crp")
-* [Optimizing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "optimize the crp!")
-* [Avoiding Rendering Blocking CSS](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "render blocking css")
-* [Optimizing JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [Measuring with Navigation Timing](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api"). We didn't cover the Navigation Timing API in the first two lessons but it's an incredibly useful tool for automated page profiling. I highly recommend reading.
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">The fewer the downloads, the better</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">Reduce the size of text</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">Optimize images</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP caching</a>
-
-### Customization with Bootstrap
-The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework. All custom styles are in `dist/css/portfolio.css` in the portfolio repo.
-
-* <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
+# Index.html 
+* used web font loader
+  * This prevents the font from Google from blocking page rendering
+* Changed GA script tag to defer and placed script utilizing GA at end of page
+* Made all CSS Inline
+* Optimized all images
+  * used ImageMagick to reformat all images to lossless webp
