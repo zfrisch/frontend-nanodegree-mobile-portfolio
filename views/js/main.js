@@ -422,11 +422,8 @@ var resizePizzas = function(size) {
   domPizzaSize.innerHTML = changeSliderLabel(size);
 
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
-  function determineDx (elem, size) {
-    var oldWidth = itemWidth;
-    var oldSize = computedWidth;
-    console.log(oldWidth);
-    console.log(oldSize);
+   
+
     // Changes the slider value to a percent width
     function sizeSwitcher (size) {
       switch(size) {
@@ -441,14 +438,11 @@ var resizePizzas = function(size) {
       }
     }
 
-    var newSize = sizeSwitcher(size);
-    var dx = {dx: (newSize - oldSize) * windowWidth, offset: oldWidth };
-
-    return dx;
-  }
-
   // Iterates through pizza elements on the page and changes their widths
   //optimized: made a reference to randomPizzaContainer and utilized that instead of querying the dom every time.
+  //optimized: added global variables instead of having them computed in for loop.
+  //optimized - removed determinDX function as it was rather pointless. hardcoded the math into the for loop
+  //and made the sizeSwitcher globally accessible for quick use. This removes a function call and lowers are speed.
     var windowWidth = document.getElementById("randomPizzas").offsetWidth;
     var itemWidth, computedWidth;
   function changePizzaSizes(size) {
@@ -456,8 +450,7 @@ var resizePizzas = function(size) {
     itemWidth = items[0].offsetWidth;
     computedWidth = itemWidth / windowWidth;
     for (var i = 0; i < items.length; i++) {
-      var dx = determineDx(items[i], size);
-      var newwidth = (dx.offset + dx.dx) + 'px';
+      var newwidth = (itemWidth + ((sizeSwitcher(size) - computedWidth) * windowWidth)) + 'px';
       items[i].style.width = newwidth;
     }
   }
