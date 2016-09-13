@@ -15,13 +15,6 @@
 
     <!--optimized: added async-->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-    <script>
-    WebFont.load({
-    google: {
-      families: ['Open Sans:400,700']
-    }
-  });
-    </script>
     <script defer src="https://www.google-analytics.com/analytics.js"></script>
     <script async src="js/perfmatters.js"></script>
   </head>
@@ -75,6 +68,11 @@
       // Optional TODO: replace with your Google Analytics profile ID.
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
+          WebFont.load({
+    google: {
+      families: ['Open Sans:400,700']
+    }
+  });
     </script>
   </body>
 </html>
